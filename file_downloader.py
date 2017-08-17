@@ -20,6 +20,7 @@ def scrape_links(html):
     for result in results:
         link=result.a['href'][7:].split('&')[0]
         links.append(link)
+    return links    
 
 
 
@@ -32,20 +33,34 @@ def get_google_links(limit,params):
         resp=requests.get("https://www.google.com/search", params = params)
         #print(resp.url)
         page_links=scrape_links(resp.content)
+        return page_links
         
 
                  
-def search():
-    user_input=input()
+def search(user_input):
     search_query=user_input
     params={
             'q':search_query,
             }
-    get_google_links(10,params)    
+    all_link=get_google_links(10,params)
+    return all_link
     
-search()    
+def download():
+    user_input=input()
+    all_link=search(user_input)
+    for link in all_link:
+        book_name=link.split('/')[-1]
+        print(book_name)
+        with open(book_name,'wb') as book:
+            r=requests.get(link,stream=True)
+            for block in r.iter_content(512):
+                if not block:
+                    break
+                book.write(block)
+                
+        break
     
-    
+download()    
     
     
     

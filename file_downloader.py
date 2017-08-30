@@ -18,7 +18,7 @@ import os
 
 def scrape_links(html):
     # function to scarpe links from html response
-    soup=BeautifulSoup(html,'lxml')
+    soup=BeautifulSoup(html,'html.parser')
     links=[]
     results=soup.findAll('h3',{'class':'r'})
     for result in results:
